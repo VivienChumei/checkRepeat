@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>检测重复字</title>
+</head>
+<style type="text/css">
+    .box {
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    textarea {
+        width: 49%;
+        max-width: 49%;
+        padding: 13px;
+        box-sizing: border-box;
+    }
+
+    button {
+        border: 1px solid #C1A3A3;
+        background-color: #F2012E;
+        color: white;
+        border-radius: 50px;
+        padding: 7px 12px;
+    }
+
+    button:hover, button:focus {
+        background-color: #908587;
+    }
+</style>
+<body>
+<div class="box">
+    <textarea id="txt" type="text" rows="20" cols="60" placeholder="A区文字"></textarea>
+    <textarea id="txt2" type="text" rows="20" cols="60" placeholder="B区文字"></textarea>
+    <br/><br/>
+    <button onclick="ObjectFunc.submit();">A区去重复字</button>
+    <button onclick="ObjectFunc.addTxt()">B区较A区多余文字</button>
+    <button onclick="ObjectFunc.delExcess()">A区较B区多余文字</button>
+    <br/><br/>
+    结果：
+    <hr/>
+    <div id="resultBox"></div>
+</div>
+</body>
+<script type="text/javascript">
+    var ObjectFunc = {
+        init:function(){
+            var arrA=document.getElementById('txt').value.split('');//A总文字可能有重复
+            var arrB=document.getElementById('txt2').value.split('');//B总文字可能有重复
+            return ({'arrA':arrA,'arrB':arrB});
+        },
+        reArr: function (arr) { //数组去重复元素
+            for (var i = 0, j; i < arr.length; i++) {
+                for (j = i + 1; j < arr.length; j++) {
+                    if (arr[i] == arr[j]) {
+                        arr.splice(j, 1);//删除重复字
+                        //console.log("i="+i,"j="+j);
+                        j--;
+                        //console.log("arr="+arr)
+                    }
+                }
+            }
+            return arr;
+        },
+        delDot: function (arr) {//去逗号
+            var arrStr = arr.toString().replace(/,/g, '');//去逗号
+            console.log(arrStr);
+            console.log("arr=" + arr);
+            return arrStr;
+
+        },
+        noRepeatBoth:function(arrA,arrB){//两数组去重
+            for(var i=0;i<arrA.length;i++){
+                for(var j=0;j<arrB.length;j++){
+                    if(arrA[i]==arrB[j]){
+                        arrA.splice(i,1);//删除重复字
+                        arrB.splice(j,1);//删除重复字
+                        i--;
+                        j--;
+                        continue;
+                    }
+                }
+            }
+            return ({'arrA':arrA,'arrB':arrB});
+        },
+        submit: function () {
+            var initData=this.init();
+            document.getElementById('resultBox').innerText = this.delDot(this.reArr(initData.arrA));//结果 去重复
+        },
+        addTxt: function () {//原有多余的部分增加 B区较A区多余文字
+            var initData=this.init();
+            var reArrA = this.reArr(initData.arrA);
+            var reArrB = this.reArr(initData.arrB);
+            var jsonData=this.noRepeatBoth(reArrA,reArrB);
+            document.getElementById('resultBox').innerText = this.delDot(jsonData.arrB);//结果 去逗号
+        },
+        delExcess: function () {//原有多余的部分删除 A区较B区多余文字
+            var initData=this.init();
+            var reArrA = this.reArr(initData.arrA);
+            var reArrB = this.reArr(initData.arrB);
+            var jsonData=this.noRepeatBoth(reArrA,reArrB);
+            document.getElementById('resultBox').innerText = this.delDot(jsonData.arrA);//结果 去逗号
+        }
+    }
+</script>
+</html>
