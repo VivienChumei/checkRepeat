@@ -44,7 +44,8 @@
 </div>
 </body>
 <script type="text/javascript">
-    window['ObjectFunc'] = {
+    window.onload=function(){
+    var ObjectFunc = {
         init:function(){
             var arrA=document.getElementById('txt').value.split('');//A总文字可能有重复
             var arrB=document.getElementById('txt2').value.split('');//B总文字可能有重复
@@ -102,6 +103,6 @@
             var jsonData=this.noRepeatBoth(reArrA,reArrB);
             document.getElementById('resultBox').innerText = this.delDot(jsonData.arrA);//结果 去逗号
         }
-    }
+    }}
 </script>
 </html>
